@@ -6,8 +6,8 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const promptFirst = `Please create words: 1) famous man or women name and surname, 2) some place name on a earth or some popular event, 3) any verb for a action`;
-const promptSecond = `Please create funny fake news from 25 to 150 words with this words: %`;
+const promptFirst = `Return 3 random words сorresponding to these points: 1. famous man or women name and surname, 2. some place name on a earth or some popular event, 3. any verb for a action`;
+const promptSecond = `Come up with funny new news using title, subtitle, lead/introduction, body text and conclusion with this following words: %`;
 
 const runCompletion = async (prompt) => {
   try {
@@ -17,7 +17,9 @@ const runCompletion = async (prompt) => {
     });
     return completion.data.choices[0].text;
   } catch (error) {
-    throw new Error(error);
+    console.log("runCompletion");
+    console.log(error);
+    // throw new Error(error);
   }
 };
 
@@ -32,7 +34,9 @@ const generateImg = async (prompt) => {
     const dataURL = imgData.data.data[0].url;
     return dataURL;
   } catch (error) {
-    throw new Error(error);
+    console.log("generateImg");
+    console.log(error);
+    // throw new Error(error);
   }
 };
 
