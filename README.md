@@ -1,7 +1,7 @@
-# Node-weather-telegram-bot Application
+# node-gpt-chat-telegram-bot
 
 Built using Nodejs
 
-[Link to the DEMO](https://t.me/CoolWeatherToday10000Bot)
+[Link to the DEMO](https://t.me/FunnyFakeNewsBot)
 
 > © Copyright by Askhat Bagaviyev. Implemented by Askhat Bagaviyev.
