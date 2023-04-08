@@ -30,29 +30,41 @@ bot.start((ctx) =>
 );
 bot.on("message", async (ctx) => {
   if (ctx.message.text === "/news") {
-    ctx.reply(`Please wait, i'm generating news!`);
+    try {
+      ctx.reply(`Please wait, i'm generating news!`);
 
-    ctx.reply(`I'm searching a words...`);
-    const basicWords = await runCompletion(promptFirst);
-    ctx.reply(`I'm preparing news...`);
-    const resultFakeNews = await runCompletion(
-      promptSecond.replace("%", basicWords)
+      ctx.reply(`I'm searching a words...`);
+      const basicWords = await runCompletion(promptFirst);
+      ctx.reply(`I'm preparing news...`);
+      const resultFakeNews = await runCompletion(
+        promptSecond.replace("%", basicWords)
+      );
+      ctx.reply(`I'm drawing image for this news...`);
+      const imageNews = await generateImg(`${JSON.stringify(basicWords)}`);
+
+      // ctx.replyWithPhoto(`${imageNews}`);
+      // ctx.reply(`${resultFakeNews}`);
+
+      ctx.replyWithPhoto(
+        { url: `${imageNews}` },
+        {
+          caption: `${stringCleaner(resultFakeNews)}`,
+          parse_mode: "MarkdownV2",
+        }
+      );
+    } catch (error) {
+    } finally {
+      return;
+    }
+  }
+
+  if (ctx.message.text === "/help") {
+    ctx.reply(`Generator News - working after typing /news command`);
+  }
+  if (ctx.message.text === "/info") {
+    ctx.reply(
+      `Introducing the wackiest news channel on the internet! Our news generator channel is dedicated to creating fake, but funny news stories that will leave you in stitches. From aliens invading Earth to dogs learning how to speak, our outrageous headlines will keep you entertained for hours. So sit back, relax, and get ready to laugh out loud as we bring you the most absurd and hilarious news stories you'll ever hear.`
     );
-    ctx.reply(`I'm drawing image for this news...`);
-    const imageNews = await generateImg(`${JSON.stringify(basicWords)}`);
-
-    // ctx.replyWithPhoto(`${imageNews}`);
-    // ctx.reply(`${resultFakeNews}`);
-
-    ctx.replyWithPhoto(
-      { url: `${imageNews}` },
-      {
-        caption: `${stringCleaner(resultFakeNews)}`,
-        parse_mode: "MarkdownV2",
-      }
-    );
-
-    return;
   }
 
   ctx.reply(`Oops! Request denied!`);
