@@ -6,9 +6,6 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const promptFirst = `Return 3 random words сorresponding to these points: 1. famous man or women name and surname, 2. some place name on a earth or some popular event, 3. any verb for a action`;
-const promptSecond = `Come up with funny new news using title, subtitle, lead/introduction, body text and conclusion with this following words: %`;
-
 const runCompletion = async (prompt) => {
   try {
     const completion = await openai.createCompletion({
@@ -17,9 +14,7 @@ const runCompletion = async (prompt) => {
     });
     return completion.data.choices[0].text;
   } catch (error) {
-    console.log("runCompletion");
-    console.log(error);
-    // throw new Error(error);
+    throw new Error(error);
   }
 };
 
@@ -34,9 +29,7 @@ const generateImg = async (prompt) => {
     const dataURL = imgData.data.data[0].url;
     return dataURL;
   } catch (error) {
-    console.log("generateImg");
-    console.log(error);
-    // throw new Error(error);
+    throw new Error(error);
   }
 };
 
@@ -44,7 +37,5 @@ const generateImg = async (prompt) => {
 
 module.exports = {
   runCompletion,
-  promptFirst,
-  promptSecond,
   generateImg,
 };

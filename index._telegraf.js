@@ -1,6 +1,6 @@
 const { Telegraf } = require("telegraf");
-// const { message } = require("telegraf/filters");
-// const axios = require("axios");
+const { message } = require("telegraf/filters");
+const axios = require("axios");
 
 const {
   runCompletion,
@@ -8,15 +8,7 @@ const {
 } = require("./controllers/openAiController");
 
 const promptFirst = `Imagine 3 random words corresponding to these points: famous man or women name and surname, some place name on a earth or some popular event, any verb for a action`;
-const promptSecond = ``;
-
-// const stringCleaner = (str) =>
-//   str
-//     .replace(/\w+(\n|\n1)/gi, "")
-//     .replace("_", "\\_")
-//     .replace("*", "\\*")
-//     .replace("[", "\\[")
-//     .replace("`", "\\`");
+const promptSecond = `Write joke news using this following words: %`;
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.start((ctx) =>
@@ -28,19 +20,24 @@ bot.on("message", async (ctx) => {
       ctx.reply(`Please wait, i'm generating news!`);
 
       const basicWords = await runCompletion(promptFirst);
+      console.log(basicWords);
+      console.log(stringCleaner(basicWords));
       const resultFakeNews = await runCompletion(
-        `Write joke news using this following words: ${basicWords}`
+        promptSecond.replace("%", basicWords)
       );
-      const imageNews = await generateImg(`${JSON.stringify(resultFakeNews)}`);
+      ctx.reply(`News preapared. I'm drawing image for this news...`);
+      const imageNews = await generateImg(`${JSON.stringify(basicWords)}`);
 
-      // ctx.replyWithPhoto(`${imageNews}`);
-      // ctx.reply(`${resultFakeNews}`);
+      ctx.replyWithPhoto(`${imageNews}`);
+      ctx.reply(`${resultFakeNews}`);
+      console.log(imageNews);
+      console.log(resultFakeNews);
 
       ctx.replyWithPhoto(
         { url: `${imageNews}` },
         {
-          caption: `${resultFakeNews}`,
-          parse_mode: "HTML", // "MarkdownV2",
+          caption: `${stringCleaner(resultFakeNews)}`,
+          parse_mode: "MarkdownV2",
         }
       );
     } catch (error) {
